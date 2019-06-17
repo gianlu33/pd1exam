@@ -1,0 +1,55 @@
+/* Common parts */
+
+header {
+	text-align: center;
+}
+
+body {
+}
+
+nav {
+	position: fixed;
+	margin-top: auto;
+	margin-bottom: auto;
+	text-align: center;
+}
+
+nav a {
+  display: block;
+  border-bottom: 2pt solid lightblue;
+  padding: 5px;
+  transition: background-color 0.5s ease,
+		color 1s ease;
+}
+nav a:first-child {
+  border-top: 2pt solid lightblue;
+}
+nav a:hover {
+  background-color: #c4d2f2;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.1s ease,
+		color .5s ease;
+}
+
+/* Main.php */
+	
+	#svg_container {
+		display: block;
+	    margin-left: auto;
+	    margin-right: auto;
+	}
+	
+	#map {
+		fill:blue;
+		fill-opacity:0.1;
+		stroke-opacity:0.9;
+	}
+	
+	circle {
+		cursor:pointer;
+	}
+
+/* Login.php */
+
+/* Registration.php */
