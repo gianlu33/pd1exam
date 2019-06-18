@@ -33,6 +33,3 @@ function displayInfoPoint(x, y) {
 	}
 }
 
-function check() {
-	console.log("ciao");
-}

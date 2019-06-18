@@ -8,6 +8,7 @@ header {
 div#left_block {
 	float: left;
 	width: 10%;
+	height: 100%;
 }
 
 div#center_block {
@@ -20,9 +21,14 @@ div#right_block {
 	width: 10%;
 }
 
+p.p_inline {
+	display: inline;
+}
+
 nav {
+	display: inline-block;
 	text-align: center;
-	margin: auto;
+  	vertical-align: middle;
 }
 
 nav a {
@@ -66,6 +72,12 @@ div.form input {
 }
 
 /* Main.php */
+
+	#tot_disp {
+		width: 100%;
+		text-align: center;
+		margin-bottom: 10px;
+	}
 	
 	#svg_container {
 		display: block;

@@ -25,14 +25,15 @@
     </div>
     
     <div id="center_block" class="js_view">
+        <div id="tot_disp">
+            Disponibilit&agrave totale:
+            Motorini: <p class="p_inline" id="tot_moto"></p>
+            Biciclette: <p class="p_inline" id="tot_bici"></p>
+        </div>
     	<?php fillMap() ?>
     </div>
     
-    <div id="right_block" class="js_view">
-    	<div id="total_disp">
-    		<p>Disponibilit&agrave totale:</p>
-    	</div>
-    	
+    <div id="right_block" class="js_view">         	
     	<div id="reservation">
     		<p>Prenotazione</p>
     	</div>

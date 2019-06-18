@@ -7,7 +7,6 @@ function fillMap(){
     echo "<svg class='js_view' width='$width' height='$height' id='svg_container'>\n";
     echo "<rect width='600' height='400' id='map' />\n";
     
-    //TODO connessione al DB per le postazioni noleggio
     getAvailability();
     
     echo "Sorry, your browser does not support inline SVG.\n";
@@ -15,6 +14,9 @@ function fillMap(){
 }
 
 function getAvailability(){
+    $tot_bici = 0;
+    $tot_moto = 0;
+    
     $conn = dbConnect();
     
     $sql = "SELECT * FROM AVAILABILITY";
@@ -25,7 +27,16 @@ function getAvailability(){
     
     while($row = mysqli_fetch_array($risposta, MYSQLI_ASSOC)) {
         drawCircle($row["X"], $row["Y"], $row["NumBici"] + $row["NumMoto"]);
+        
+        $tot_moto += (int) $row["NumMoto"];
+        $tot_bici += (int) $row["NumBici"];
     }
+    
+    //show total
+    echo "<script>	
+            $('#tot_moto').text($tot_moto);
+	        $('#tot_bici').text($tot_bici);
+	       </script>";
      
     mysqli_free_result($risposta);
     mysqli_close($conn);
