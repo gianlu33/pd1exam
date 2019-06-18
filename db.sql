@@ -1,0 +1,56 @@
+DROP TABLE IF EXISTS USERS;
+DROP TABLE IF EXISTS AVAILABILITY;
+DROP TABLE IF EXISTS RESERVATIONS;
+
+CREATE TABLE USERS (
+	Username VARCHAR(30) NOT NULL PRIMARY KEY,
+	Password VARCHAR(32) NOT NULL
+);
+
+CREATE TABLE AVAILABILITY (
+	X INTEGER NOT NULL,
+	Y INTEGER NOT NULL,
+	NumBici INTEGER NOT NULL,
+	NumMoto INTEGER NOT NULL,
+	PRIMARY KEY (X,Y)
+);
+
+CREATE TABLE RESERVATIONS (
+	Username VARCHAR(30) NOT NULL,
+	X INTEGER NOT NULL,
+	Y INTEGER NOT NULL,
+	NumBici INTEGER NOT NULL,
+	NumMoto INTEGER NOT NULL,
+	PRIMARY KEY (Username, X, Y)
+);
+
+INSERT INTO USERS(Username, Password) 
+VALUES
+("u1@p.it", md5("p.-1")),
+("u2@p.it", md5("p.-2")),
+("u3@p.it", md5("p.-3"));
+
+/* valori di partenza */
+
+INSERT INTO AVAILABILITY(X, Y, NumBici, NumMoto)
+VALUES
+(10, 20, 2, 3),
+(30, 60, 3, 4),
+(40, 134, 3, 3),
+(30, 180, 2, 1),
+(130, 290, 3, 0),
+(255, 360, 4, 2),
+(440, 241, 0, 0);
+
+
+/* valori finali dell'esempio */
+UPDATE AVAILABILITY
+SET NumBici = NumBici - 2,
+	NumMoto = NumMoto - 3
+WHERE X = 40 AND Y = 134;
+
+INSERT INTO RESERVATIONS(Username, X, Y, NumBici, NumMoto)
+VALUES
+("u1@p.it", 40, 134, 2, 3);
+
+
