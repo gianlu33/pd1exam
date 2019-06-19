@@ -5,20 +5,70 @@ header {
 	width: 100%;
 }
 
+h3 {
+	text-align: center;
+}
+
 div#left_block {
 	float: left;
-	width: 10%;
+	width: 20%;
 	height: 100%;
 }
 
 div#center_block {
 	float: left;
-	width: 80%;
+	width: 60%;
 }
 
 div#right_block {
 	float: right;
-	width: 10%;
+	width: 20%;
+}
+
+div.error_message {
+	width: 50%;
+	padding: 10px;
+	margin-top: 20px;
+	text-align: center;
+	color: white;
+	background-color: #ec3232;
+	opacity: 0.8;
+	margin-bottom: 20px;
+	display: none;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+div.success_message {
+	width: 50%;
+	padding: 10px;
+	margin-top: 20px;
+	text-align: center;
+	color: white;
+	background-color: #4cc64c;
+	margin-bottom: 20px;
+	display: none;
+	margin-right: auto;
+	margin-left: auto;
+}
+
+.closebtn {
+  margin-left: 15px;
+  color: white;
+  font-weight: bold;
+  float: right;
+  font-size: 22px;
+  line-height: 20px;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.closebtn:hover {
+  color: black;
+}
+
+p {
+	text-align: center;
 }
 
 p.p_inline {
@@ -55,7 +105,7 @@ nav a.hide_link {
 }
 
 div.form {
-	width: 50%;
+	width: 100%;
 	margin-left: auto;
 	margin-right: auto;	
 }
@@ -117,7 +167,8 @@ div.form input {
 		display: none;
 	}
 	
-	#reservation {
+	#point_infos {
+		text-align: center;
 		display: none;
 	}
 
