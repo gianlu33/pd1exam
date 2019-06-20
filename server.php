@@ -3,9 +3,6 @@ session_start();
 
 include 'utils.php';
 
-//TODO sessione.. ste cose solo se sei loggato le puoi fare
-//TODO vedi se va bene che accedendo dal browser mi restituisce err..
-
 if(!isset($_REQUEST["type"])) {
     http_response_code (400);
     exit;
@@ -45,10 +42,20 @@ function manageInfoPoint() {
         exit;
     }
     
-    $x = $_REQUEST["x"];
-    $y = $_REQUEST["y"];
-
-    echo getInfoPoint($x, $y);
+    $x = htmlentities($_REQUEST["x"]);
+    $y = htmlentities($_REQUEST["y"]);
+        
+    try {
+        if(!ctype_digit($x) || !ctype_digit($y))
+            throw new Exception("Parametri non validi");
+        
+        $result = getInfoPoint($x, $y);
+        echo $result;
+    }
+    catch(Exception $e) {
+        http_response_code (400);
+        echo $e->getMessage();
+    }
 }
 
 function manageLogin() {
@@ -62,16 +69,25 @@ function manageLogin() {
         exit;
     }
     
-    $email = $_REQUEST["email"];
+    $email = htmlentities($_REQUEST["email"]);
+    
+    //no strip of psw. (md5 later will remove any problem.)
     $psw = $_REQUEST["psw"];
-    
-    $result = authLogin($email, $psw);    
-    
-    if($result === true){
+        
+    try {
+        //TODO vedi se lasciarli.. perchè è anche abbastanza inutile
+        if(!checkEmail($email))
+            throw new Exception("Email non valida");
+            
+        if(!checkPassword($psw))
+            throw new Exception("Password non valida");
+                
+        authLogin($email, $psw);    
         $_SESSION["email"] = $email;
     }
-    else {
-        http_response_code (401);
+    catch(Exception $e) {
+        http_response_code(400);
+        echo $e->getMessage();
     }
 }
 
@@ -95,23 +111,33 @@ function manageRegistration() {
         exit;
     }
     
-    $email = $_REQUEST["email"];
+    $email = htmlentities($_REQUEST["email"]);
+    //no strip of psw. (md5 later will remove any problem.)
     $psw = $_REQUEST["psw"];
     $psw_confirm = $_REQUEST["psw_confirm"];
     
-    //TODO controlla uguaglianza psw
-    
-    $result = authRegistration($email, $psw);
-    
-    if($result === true){
+    //TODO controlla email valida e uguaglianza psw, psw corretta
+       
+    try {
+        if(!checkEmail($email)) 
+            throw new Exception("Email non valida");
+        
+        if(!checkPassword($psw))
+            throw new Exception("Password non valida");
+        
+        if($psw !== $psw_confirm)
+            throw new Exception("I due campi della password non sono uguali");
+            
+        authRegistration($email, $psw);
         $_SESSION["email"] = $email;
     }
-    else {
-        http_response_code (401);
+    catch(Exception $e) {
+        http_response_code (400);
+        echo $e->getMessage();
     }
 }
 
-function manageReservation() {
+function manageReservation() {    
     if(!isset($_SESSION["email"])){
         http_response_code (401);
         exit;
@@ -120,17 +146,30 @@ function manageReservation() {
     if(!isset($_REQUEST["x"]) || !isset($_REQUEST["y"]) || 
        !isset($_REQUEST["moto"]) || !isset($_REQUEST["bici"])){
         http_response_code (400);
+        echo "Parametri mancanti";
         exit;
     }
     
-    $x = $_REQUEST["x"];
-    $y = $_REQUEST["y"];
-    $moto = $_REQUEST["moto"];
-    $bici = $_REQUEST["bici"];
-    
-    //TODO controlla qui?
-    
-    echo authReservation($x, $y, $moto, $bici);    
+    $x = htmlentities($_REQUEST["x"]);
+    $y = htmlentities($_REQUEST["y"]);
+    $moto = htmlentities($_REQUEST["moto"]);
+    $bici = htmlentities($_REQUEST["bici"]);
+        
+    try {
+        //non accetto valori negativi! il ctype_digit controlla se ogni singolo carattere sia un numero
+        if(!ctype_digit($x) || !ctype_digit($y) || !ctype_digit($moto) || !ctype_digit($bici))
+            throw new Exception("Parametri non validi");
+        
+        if($moto == 0 && $bici == 0)
+            throw new Exception("Devi prenotare almeno un mezzo");
+        
+        $result = authReservation($x, $y, $moto, $bici);
+        echo $result;
+    }
+    catch(Exception $e) {
+        http_response_code (400);
+        echo $e->getMessage();
+    }
 }
 
 ?>

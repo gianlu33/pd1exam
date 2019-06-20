@@ -7,13 +7,13 @@ function fillMap(){
     echo "<svg class='js_view' width='$width' height='$height' id='svg_container'>\n";
     echo "<rect width='600' height='400' id='map' />\n";
     
-    getAvailability();
+    getAvailability($height);
     
     echo "Sorry, your browser does not support inline SVG.\n";
     echo "</svg>\n";
 }
 
-function getAvailability(){
+function getAvailability($height){
     $tot_bici = 0;
     $tot_moto = 0;
     
@@ -26,7 +26,7 @@ function getAvailability(){
     }
     
     while($row = mysqli_fetch_array($risposta, MYSQLI_ASSOC)) {
-        drawCircle($row["X"], $row["Y"], $row["NumBici"] + $row["NumMoto"]);
+        drawCircle($height, $row["X"], $row["Y"], $row["NumBici"] + $row["NumMoto"]);
         
         $tot_moto += (int) $row["NumMoto"];
         $tot_bici += (int) $row["NumBici"];
@@ -43,29 +43,21 @@ function getAvailability(){
 }
 
 function dbConnect() {
-    //TODO mettere exceptions se va male la connessione, e catturarle in giro facendo cose ragionevoli
     $user = "root";
     $pwd = "";
     $db = "exam";
     
     $conn = mysqli_connect("localhost", $user, $pwd, $db);
     if(mysqli_connect_error()) { 
-        myRedirect("main.php", "Errore di collegamento al DB"); 
+        throw new Exception("Errore di collegamento al DB");
     }
     
     return $conn;
 }
 
-//TODO rivedi
-function myRedirect($location, $msg="") {
-    header('HTTP/1.1 307 temporary redirect');
-    // L’URL relativo è accettato solo da HTTP/1.1
-    header("Location: $location?msg=".urlencode($msg));
-    exit; // Necessario per evitare ulteriore
-    // processamento della pagina
-}
-
-function drawCircle($x, $y, $num){        
+function drawCircle($height, $x, $y, $num){ 
+    $real_y = $height - $y;
+    
     if($num >= 4)
         $class = "green";
     else if($num < 4 && $num > 0)
@@ -73,7 +65,7 @@ function drawCircle($x, $y, $num){
     else
         $class = "red";
     
-    echo "<circle id='circle_". $x . "_" . $y . "' cx='$x' cy='$y' r='5' class=$class
+    echo "<circle id='circle_". $x . "_" . $y . "' cx='$x' cy='$real_y' r='5' class=$class
             onclick='displayInfoPoint($x, $y)' />\n";
 }
 
@@ -86,15 +78,20 @@ function console_log( $data ){
 function getInfoPoint($x, $y){
     $conn = dbConnect();
     
-    //TODO sanificare, statement
+    $x = mysqli_real_escape_string($conn, $x);
+    $y = mysqli_real_escape_string($conn, $y);
+    
     $sql = "SELECT SUM(NumMoto), SUM(NumBici) FROM AVAILABILITY WHERE X = $x AND Y = $y";
     
     if(! $risposta = mysqli_query($conn,$sql)) {
-        //TODO vedi questo caso
-        myRedirect("main.php", "Errore di collegamento al DB");
+        throw new Exception("Errore durante la query al DB");
     }
     
     $row = mysqli_fetch_array($risposta, MYSQLI_NUM);
+    
+    if(!isset($row[0]) || !isset($row[1])) {
+        throw new Exception("Posto di noleggio non esistente");
+    }
     
     $availability = $row[0] . "-" . $row[1];
     
@@ -107,62 +104,69 @@ function getInfoPoint($x, $y){
 function authLogin($username, $password) {
     $conn = dbConnect();
         
-    //TODO sanificare, statement
+    $username = mysqli_real_escape_string($conn, $username);
     $psw_md5 = md5($password);
+    
+    //TODO vedi se fare prima una select per vedere se username esiste (per differenziare i msg errore)
     
     $sql = "SELECT COUNT(*) FROM USERS WHERE Username = '$username' AND Password = '$psw_md5'";
     
-    if(! $risposta = mysqli_query($conn,$sql)) {
-        //TODO vedi questo caso
-        myRedirect("login.php", "Errore di collegamento al DB");
+    if(!$risposta = mysqli_query($conn,$sql)) {
+        throw new Exception("Errore durante la query al DB");
     }
     
     $row = mysqli_fetch_array($risposta, MYSQLI_NUM);
 
-    if($row[0] == 1) $returnValue = true;
-    else $returnValue = false;
-    
     mysqli_free_result($risposta);
     mysqli_close($conn);
     
-    return $returnValue;
+    if($row[0] == 0) throw new Exception("Username o password errati.");
 }
 
 function authRegistration($username, $password) {
     $conn = dbConnect();
-    $returnValue = true;
     
-    //TODO sanificare, statement
+    $username = mysqli_real_escape_string($conn, $username);
     $psw_md5 = md5($password);
+    //TODO valuta se mettere sale
+    
+    //TODO vedi se fare prima una select per vedere se username esiste gia
     
     $sql = "INSERT INTO USERS(Username, Password) VALUES ('$username', '$psw_md5')";
     
     if(!mysqli_query($conn,$sql)) {
-        //TODO vedi questo caso
-        $returnValue = false;
+        mysqli_close($conn);
+        throw new Exception("Username gi" . utf8_encode("à") . " esistente");
     }
     
     mysqli_close($conn);
-    return $returnValue;
 }
 
 function authReservation($x, $y, $moto, $bici) {
     $conn = dbConnect();
-    mysqli_autocommit($conn,false);
     
     $user = $_SESSION["email"];
     
-    //TODO sanificare, statement
+    $x = mysqli_real_escape_string($conn, $x);
+    $y = mysqli_real_escape_string($conn, $y);
+    $moto = mysqli_real_escape_string($conn, $moto);
+    $bici = mysqli_real_escape_string($conn, $bici);
     
     try {
-        $sql_check = "SELECT NumMoto, NumBici FROM AVAILABILITY WHERE X = '$x' AND Y = '$y'";
+        mysqli_autocommit($conn,false);
+        
+        $sql_check = "SELECT NumMoto, NumBici FROM AVAILABILITY WHERE X = '$x' AND Y = '$y' FOR UPDATE";
         
         if(! $risposta = mysqli_query($conn,$sql_check)) {
-            //TODO vedi questo caso
-            throw new Exception("Errore verifica disponibilità posti");
-        }
+            throw new Exception("Errore verifica disponibilit" . utf8_encode("à") . " posti");
+        }        
         
         $row = mysqli_fetch_array($risposta, MYSQLI_ASSOC);
+        
+        if(!isset($row["NumMoto"]) || !isset($row["NumBici"])) {
+            throw new Exception("Posto di noleggio non esistente");
+        }
+        
         $max_moto = $row["NumMoto"];
         $max_bici = $row["NumBici"];
         mysqli_free_result($risposta);
@@ -185,31 +189,40 @@ function authReservation($x, $y, $moto, $bici) {
                         NumBici = NumBici - '$bici_sold' WHERE X = '$x' AND Y = '$y'";
         
         if(!mysqli_query($conn,$sql_reserve)) {
-            //TODO vedi questo caso
-            throw new Exception("Errore aggiornamento posti disponibili");
+            throw new Exception("Errore aggiornamento posti in AVAILABILITY");
         }
         
         $sql_insert = "INSERT INTO RESERVATIONS (Username, X, Y, NumBici, NumMoto)
                         VALUES ('$user', '$x', '$y', '$bici_sold', '$moto_sold')";
         
         if(!mysqli_query($conn,$sql_insert)) {
-            //TODO vedi questo caso
             throw new Exception("Errore aggiunta riga nella tabella RESERVATIONS");
         }
         
         if(!mysqli_commit($conn)) {
             throw new Exception("Errore al commit");
         }
+        
+        mysqli_autocommit($conn,true);
+        mysqli_close($conn);
+        return $sold;
     
-    }catch(Exception $e) {
+    } catch(Exception $e) {
         mysqli_rollback($conn);
         mysqli_autocommit($conn,true);
         mysqli_close($conn);
-        return "0-" . $e->getMessage();
+        throw new Exception($e->getMessage());
     }
-    
-    mysqli_autocommit($conn,true);
-    mysqli_close($conn);
-    return "1-$sold";
 }
+
+function checkEmail($email) {
+    return filter_var($email, FILTER_VALIDATE_EMAIL);
+}
+
+function checkPassword($password) {
+    $regex = "/^([a-zA-Z\d]*[^a-zA-Z\d]){2,}[a-zA-Z\d]*$/";
+    
+    return preg_match($regex, $password);
+}
+
 ?>

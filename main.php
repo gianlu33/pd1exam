@@ -16,12 +16,6 @@ include 'utils.php';
     <header>
         <h1 id="title">Noleggio mezzi di trasporto</h1>
         <h3 id="subtitle">Prenotazioni</h3>
-        <?php if(isset($_REQUEST["reservation_result"]) && isset($_REQUEST["reservation_message"])) { ?>
-        <div class="<?php echo $_REQUEST["reservation_result"] ?>" style="display:block">
-          <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span> 
-          <?php echo $_REQUEST["reservation_message"] ?>
-        </div>
-        <?php } ?>
     </header>
     
     <div id="left_block" class="js_view">
@@ -37,6 +31,18 @@ include 'utils.php';
     </div>
     
     <div id="center_block" class="js_view">
+        <?php if(isset($_REQUEST["reservation_result"]) && isset($_REQUEST["reservation_message"])) { ?>
+        <div class="<?php echo $_REQUEST["reservation_result"] ?>" style="display:block">
+          <span class="closebtn" onclick="$(this).parent().hide(200);">&times;</span> 
+          <?php echo $_REQUEST["reservation_message"] ?>
+        </div>
+        <?php } ?>
+        
+        <div class="error_message" id="error_message">
+        <p class="p_inline"></p>
+        <span class="closebtn" onclick="$(this).parent().hide(200)">&times;</span>
+    	</div>
+        
         <div id="tot_disp">
             Disponibilit&agrave totale:
             Motorini: <p class="p_inline" id="tot_moto"></p>

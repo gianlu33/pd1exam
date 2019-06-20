@@ -38,20 +38,23 @@ if(isset($_SESSION["email"])){
     
     <div id="center_block" class="js_view">
     
-        <div class="error_message">
-        <span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    	Errore alla registrazione!
+        <div class="error_message" id="error_message">
+        <p class="p_inline"></p>
+        <span class="closebtn" onclick="$(this).parent().hide(200)">&times;</span>
     	</div>
 		
 		<div class="form">
             <fieldset>
                 <legend>Inserisci i tuoi dati</legend><br>
                 Email:<br>
-                <input type="email" name="email" id="email"><br>
+                <input type="email" name="email" id="email" placeholder="bob@gmail.com"><br>
                 Password:<br>
                 <input type="password" name="password" id="psw"><br>
                 Conferma password:<br>
                 <input type="password" name="password_confirm" id="psw_confirm"><br>
+                <ul>
+                <li style="text-align: left">La password deve contenere almeno due caratteri speciali</li>
+                </ul>
                 <input type="submit" value="Registrati" onclick="registration()">
             </fieldset>
         </div>

@@ -37,16 +37,16 @@ if(isset($_SESSION["email"])){
     
     <div id="center_block" class="js_view">
     	
-    	<div class="error_message">
-    	<span class="closebtn" onclick="this.parentElement.style.display='none';">&times;</span>
-    	Errore al login!
+    	<div class="error_message" id="error_message">
+    		<p class="p_inline"></p>
+    		<span class="closebtn" onclick="$(this).parent().hide(200)">&times;</span>
     	</div>
       
         <div class="form">
             <fieldset>
                 <legend>Inserisci le tue credenziali</legend><br>
                 Email:<br>
-                <input type="email" name="email" id="email"><br>
+                <input type="email" name="email" id="email" placeholder="bob@gmail.com"><br>
                 Password:<br>
                 <input type="password" name="password" id="psw"><br>
                 <input type="submit" value="Entra" onclick="login()">

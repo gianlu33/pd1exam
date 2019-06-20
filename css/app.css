@@ -26,9 +26,8 @@ div#right_block {
 }
 
 div.error_message {
-	width: 50%;
+	width: 90%;
 	padding: 10px;
-	margin-top: 20px;
 	text-align: center;
 	color: white;
 	background-color: #ec3232;
@@ -40,9 +39,8 @@ div.error_message {
 }
 
 div.success_message {
-	width: 50%;
+	width: 90%;
 	padding: 10px;
-	margin-top: 20px;
 	text-align: center;
 	color: white;
 	background-color: #4cc64c;
@@ -53,14 +51,14 @@ div.success_message {
 }
 
 .closebtn {
-  margin-left: 15px;
-  color: white;
-  font-weight: bold;
-  float: right;
-  font-size: 22px;
-  line-height: 20px;
-  cursor: pointer;
-  transition: 0.3s;
+	padding-left: 10px;
+	color: white;
+	font-weight: bold;
+	float: right;
+	font-size: 22px;
+	line-height: 20px;
+	cursor: pointer;
+	transition: 0.3s;
 }
 
 .closebtn:hover {
@@ -76,18 +74,21 @@ p.p_inline {
 }
 
 nav {
+	width: 80%;
 	display: inline-block;
 	text-align: center;
   	vertical-align: middle;
 }
 
 nav a {
-  display: block;
-  border-bottom: 2pt solid lightblue;
-  padding: 5px;
-  transition: background-color 0.5s ease,
-		color 1s ease;
+	text-decoration: none;
+	font-size: 15pt;
+	display: block;
+	border-bottom: 2pt solid lightblue;
+	padding: 20px;
+	color: #093030;
 }
+
 nav a:first-child {
   border-top: 2pt solid lightblue;
 }
@@ -95,17 +96,16 @@ nav a:first-child {
 nav a:hover {
   background-color: #c4d2f2;
   color: white;
-  text-decoration: none;
   transition: background-color 0.1s ease,
 		color .5s ease;
 }
 
-nav a.hide_link {
-	display: none;
+div {
+	overflow: auto;
 }
 
 div.form {
-	width: 100%;
+	width: 80%;
 	margin-left: auto;
 	margin-right: auto;	
 }
@@ -119,6 +119,17 @@ div.form * {
 div.form input {
 	margin-top: 10px;
 	margin-bottom:10px;
+}
+
+div#js_popup {
+	position: absolute;
+	padding: 10px;
+	text-align: center;
+	color: white;
+	background-color: #ff9a24;
+	margin-bottom: 20px;
+	display: inline;
+	margin-left: 10px;
 }
 
 /* Main.php */
@@ -168,6 +179,8 @@ div.form input {
 	}
 	
 	#point_infos {
+		margin-top: 30px;
+		margin-right: 30px;
 		text-align: center;
 		display: none;
 	}
