@@ -19,6 +19,8 @@
     <header>
         <h1>Boom Bici!</h1>
     </header>
+    
+    <div id="img"></div>
    
     <div id="left_block" class="js_view">
         <nav class="js_view">

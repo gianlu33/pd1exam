@@ -19,6 +19,8 @@
     <header>
         <h1>Boom Bici!</h1>
     </header>
+    
+    <div id="img"></div>
         
     <div id="left_block" class="js_view">
         <nav class="js_view">
@@ -54,7 +56,7 @@
             </fieldset>
         </form>
         
-    	<p><strong>NB</strong> La password deve contenere almeno due caratteri speciali</p>
+    	<p><span style="background-color:#c5c6c7; padding: 5px;"><strong>NB</strong> La password deve contenere almeno due caratteri speciali</span></p>
         
     </div>
     
