@@ -1,5 +1,11 @@
 <?php
 
+//check if user wants to access this page directly. if yes -> error
+if(strpos($_SERVER["REQUEST_URI"], 'utils.php')){
+    http_response_code (401);
+    exit;
+}
+
 function fillMap(){
     $width = 600;
     $height = 400;
@@ -65,7 +71,7 @@ function drawCircle($height, $x, $y, $num){
     else
         $class = "red";
     
-    echo "<circle id='circle_". $x . "_" . $y . "' cx='$x' cy='$real_y' r='5' class=$class
+    echo "<circle id='circle_". $x . "_" . $y . "' cx='$x' cy='$real_y' r='2.5' class=$class
             onclick='displayInfoPoint($x, $y)' />\n";
 }
 
@@ -223,6 +229,64 @@ function checkPassword($password) {
     $regex = "/^([a-zA-Z\d]*[^a-zA-Z\d]){2,}[a-zA-Z\d]*$/";
     
     return preg_match($regex, $password);
+}
+
+function verifyInactivity() {
+    $t=time(); $diff=0; $new=false;
+    
+    if (isset($_SESSION['time'])){
+        $t0=$_SESSION['time']; 
+        $diff=($t-$t0); // inactivity
+    } else {
+        $new=true;
+    }
+    
+    if ($new || ($diff > 120)) { // new or with inactivity period too long
+        destroySession();
+        return true;
+    } else {
+        $_SESSION['time']=time(); /* update time */
+        return false;
+    }
+}
+
+function destroySession() {
+    $_SESSION=array();
+    // If it's desired to kill the session, also delete the session cookie.
+    // Note: This will destroy the session, and not just the session data!
+    if (ini_get("session.use_cookies")) { // PHP using cookies to handle session
+        $params = session_get_cookie_params();
+        setcookie(session_name(), '', time() - 3600*24, $params["path"],
+            $params["domain"], $params["secure"], $params["httponly"]);
+    }
+    session_destroy(); // destroy session
+}
+
+function myRedirect($url="main.php") {
+    header('HTTP/1.1 307 temporary redirect');
+    // L’URL relativo è accettato solo da HTTP/1.1
+    header("Location: $url");
+    exit;
+}
+
+function checkLogged() {
+    if(!verifyInactivity()){
+        myRedirect();
+    }
+}
+
+function checkHTTPS() {
+    if (!empty($_SERVER['HTTPS']) && $_SERVER['HTTPS'] !== 'off') {
+        // La richiesta e' stata fatta su HTTPS
+    } else {
+        // Redirect su HTTPS
+        // eventuale distruzione sessione e cookie relativo
+        $redirect = 'https://' . $_SERVER['HTTP_HOST'] .
+        $_SERVER['REQUEST_URI'];
+        header('HTTP/1.1 301 Moved Permanently');
+        header('Location: ' . $redirect);
+        exit;
+    }
 }
 
 ?>

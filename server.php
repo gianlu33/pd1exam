@@ -84,6 +84,7 @@ function manageLogin() {
                 
         authLogin($email, $psw);    
         $_SESSION["email"] = $email;
+        $_SESSION['time']=time();
     }
     catch(Exception $e) {
         http_response_code(400);
@@ -97,7 +98,7 @@ function manageLogout() {
         exit;
     }
     
-    session_destroy();
+    destroySession();
 }
 
 function manageRegistration() {
@@ -115,9 +116,7 @@ function manageRegistration() {
     //no strip of psw. (md5 later will remove any problem.)
     $psw = $_REQUEST["psw"];
     $psw_confirm = $_REQUEST["psw_confirm"];
-    
-    //TODO controlla email valida e uguaglianza psw, psw corretta
-       
+           
     try {
         if(!checkEmail($email)) 
             throw new Exception("Email non valida");
@@ -130,6 +129,7 @@ function manageRegistration() {
             
         authRegistration($email, $psw);
         $_SESSION["email"] = $email;
+        $_SESSION['time']=time();
     }
     catch(Exception $e) {
         http_response_code (400);
@@ -140,6 +140,13 @@ function manageRegistration() {
 function manageReservation() {    
     if(!isset($_SESSION["email"])){
         http_response_code (401);
+        echo "Non sei loggato";
+        exit;
+    }
+    
+    if(verifyInactivity()) {
+        http_response_code (401);
+        echo "Sessione scaduta";
         exit;
     }
     

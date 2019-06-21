@@ -46,16 +46,15 @@ function displayInfoPoint(x, y) {
 }
 
 function getInfoPoint(x, y) {
+	$("#js_popup").remove();
 
 	if(isNaN(x) || isNaN(y) || x < 0 || y < 0) {
-		//TODO display error.. anche se qua non deve succedere
-		console.log("error!");
+		showPopup("#right_block", "Punto non valido.", true);
 		return;
 	}
 	
 	if(!pointSelected.set || x !== pointSelected.x || y !== pointSelected.y) {
-		//TODO display error.. anche se qua non deve succedere
-		console.log("error, point is not this!");
+		showPopup("#right_block", "Il punto non è quello selezionato.", true);
 		return;
 	}
 	
@@ -71,18 +70,20 @@ function getInfoPoint(x, y) {
 				var moto = values[0];
 				var bici = values[1];
 				
-				$("#disp_posto").html("X: " + x + " Y: " + y + "<br>");
+				$("#disp_posto").html("X: " + x + " Y: " + y + "<br><br>");
 				$("#disp_posto").append("Motorini: " + moto + "<br>Biciclette: " + bici);
 				$("#prenota_moto").attr("max", moto);
 				$("#prenota_bici").attr("max", bici);
 				
 				pointSelected.setPosti(moto, bici);
 			},
-		  error: (data) => showErrorMsg(data.responseText)
+		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
 }
 
-function login(){	
+function login(e){	
+	e.preventDefault();
+	
 	var email = $("#email").val();
 	var psw = $("#psw").val();
 	
@@ -102,20 +103,24 @@ function login(){
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "login", email: email, psw: psw },
-		  success: function(data){
-			  window.location.replace("main.php");
-			},
-		  error: (data) => showErrorMsg(data.responseText)
+		  success: function(data) { reloadWithMessage("main.php", "success_message", "Login eseguito.") },
+		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
 }
 
 function logout() {
-	$.post( "server.php", { type: "logout"});
-	
-	//TODO vedi se mettere qui un redirect e nel caso un post in cui poi compare un informativa "logged out"
+	$.ajax({
+		  url: 'server.php',
+		  type: 'POST',
+		  data: { type: "logout"},
+		  success: function(data) { reloadWithMessage("main.php", "success_message", "Logout eseguito.") },
+		  error: function(data) { showMsg("error_message", "Non sei loggato.") }
+		});
 }
 
-function registration() {
+function registration(e) {
+	e.preventDefault();
+
 	var email = $("#email").val();
 	var psw = $("#psw").val();
 	var psw_confirm = $("#psw_confirm").val();
@@ -141,14 +146,14 @@ function registration() {
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "registration", email: email, psw: psw, psw_confirm: psw_confirm },
-		  success: function(data){
-			  window.location.replace("main.php");
-			},
-		  error: (data) => showErrorMsg(data.responseText)
+		  success: function(data) { reloadWithMessage("main.php", "success_message", "Registrazione eseguita.") },
+		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
 }
 
-function reserve() {
+function reserve(e) {
+	e.preventDefault();
+
 	var moto = $("#prenota_moto").val();
 	var bici = $("#prenota_bici").val();
 	
@@ -193,23 +198,28 @@ function reserve() {
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "reservation", x: x, y: y, moto: moto, bici: bici },
-		  success: (data) => resultReservation("success_message", data),
-		  error: (data) => resultReservation("error_message", data.responseText)
+		  success: function(data) { reloadWithMessage("main.php", "success_message", data) },
+		  error: function(data) { reloadWithMessage("main.php", "error_message", data.responseText) }
 		});
 }
 
-function showErrorMsg(msg){
-	$("#error_message > p").text(msg);
-	$("#error_message").show(200);
+function showMsg(type, msg){
+	$("#info_message").addClass(type);
+	$("#info_message > p").text(msg);
+	$("#info_message").show(200);
 }
 
-function resultReservation(div_class, message) {	
-	var url = 'main.php';
+function hideMsg(){
+	$("#info_message").hide(200);
+	$("#info_message").removeClass();
+}
+
+function reloadWithMessage(url, type, message) {
 	var form = $('<form action="' + url + '" method="post" style="display:none">' +
-	  '<input type="text" name="reservation_result" value="' + div_class + '" />' +
-	  '<input type="text" name="reservation_message" value="' + message + '" />' +
-	  '</form>');
-	
+			  '<input type="text" name="type_msg" value="' + type + '" />' +
+			  '<input type="text" name="message" value="' + message + '" />' +
+			  '</form>');
+			
 	$('body').append(form);
 	form.submit();
 }
@@ -225,7 +235,9 @@ function checkPsw(psw) {
     return re.test(psw);
 }
 
-function showPopup(id, msg, append = false) {
+function showPopup(id, msg, append) {
+	console.log(append);
+	
 	$("#js_popup").remove();
 	
 	div = "<div id='js_popup'>" + 
@@ -242,3 +254,23 @@ function showPopup(id, msg, append = false) {
 	$("#js_popup").hide();
 	$("#js_popup").show(200);
 }
+
+function checkCookies() {
+	if (navigator.cookieEnabled) return true;
+
+	// set and read cookie
+	document.cookie = "cookietest=1";
+	var ret = document.cookie.indexOf("cookietest=") != -1;
+
+	// delete cookie
+	document.cookie = "cookietest=1; expires=Thu, 01-Jan-1970 00:00:01 GMT";
+
+	return ret;
+}
+
+$(document).ready(function() {
+	if(checkCookies()) return; //tutto ok
+	
+	$(".js_view").hide();
+	$("body").append("<h2>Cookies disabilitati</h2>");	
+});

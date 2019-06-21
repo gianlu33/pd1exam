@@ -1,11 +1,29 @@
 /* Common parts */
-
-header {
-	text-align: center;
-	width: 100%;
+* {
+	font-family: Arial;
+	margin: 0;
+	padding: 0;
 }
 
-h3 {
+body {
+	background-color: #c5c6c7;
+}
+
+header {
+	height: 60px;
+	width: 100%;
+	background-color: #1f2833;
+	color: #45a29e;
+	margin-bottom: 20px;
+}
+
+header h1 {
+	vertical-align: middle;
+	line-height: 60px; 
+	text-align: center;
+}
+
+h2, h3 {
 	text-align: center;
 }
 
@@ -25,29 +43,24 @@ div#right_block {
 	width: 20%;
 }
 
-div.error_message {
+div#info_message {
 	width: 90%;
 	padding: 10px;
 	text-align: center;
 	color: white;
-	background-color: #ec3232;
-	opacity: 0.8;
 	margin-bottom: 20px;
 	display: none;
 	margin-right: auto;
 	margin-left: auto;
 }
 
+div.error_message {
+	background-color: #ec3232;
+	opacity: 0.8;
+}
+
 div.success_message {
-	width: 90%;
-	padding: 10px;
-	text-align: center;
-	color: white;
 	background-color: #4cc64c;
-	margin-bottom: 20px;
-	display: none;
-	margin-right: auto;
-	margin-left: auto;
 }
 
 .closebtn {
@@ -78,45 +91,50 @@ nav {
 	display: inline-block;
 	text-align: center;
   	vertical-align: middle;
+  	margin-top: 30px;
+	margin-left: 30px;
 }
 
 nav a {
 	text-decoration: none;
 	font-size: 15pt;
 	display: block;
-	border-bottom: 2pt solid lightblue;
+	border-bottom: 2pt solid #1f2833;
 	padding: 20px;
-	color: #093030;
+	color: #1f2833;
 }
 
 nav a:first-child {
-  border-top: 2pt solid lightblue;
+	border-top: 2pt solid #1f2833;
 }
 
 nav a:hover {
-  background-color: #c4d2f2;
-  color: white;
-  transition: background-color 0.1s ease,
-		color .5s ease;
+	background-color: #1f2833;
+	color: white;
+	transition: background-color 0.1s ease,
+	color .5s ease;
+	cursor: pointer; 
 }
 
 div {
 	overflow: auto;
 }
 
-div.form {
+form {
 	width: 80%;
 	margin-left: auto;
 	margin-right: auto;	
+	margin-top: 40px;
+	margin-bottom: 40px;
 }
 
-div.form * {
+form * {
 	margin-left: auto;
 	margin-right: auto;
 	text-align: center;
 }
 
-div.form input {
+form input {
 	margin-top: 10px;
 	margin-bottom:10px;
 }
@@ -130,60 +148,133 @@ div#js_popup {
 	margin-bottom: 20px;
 	display: inline;
 	margin-left: 10px;
+	margin-right: 30px;
+}
+
+#subtitle {
+	margin-top: 15px;
+	margin-bottom: 30px;
+	font-style: italic;
+	font-size: 20px;
+}
+
+.button_1 {
+	background-color: #1f2833;
+	border-style: solid;
+	border-color: #1f2833;
+	border-radius: 5px;
+	color: #45a29e;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	cursor: pointer;
+	margin-bottom: 20px;
+}
+
+.button_1:hover {
+	border-color: #45a29e;
+	background-color: #45a29e;
+	color: white;
+	transition: background-color 0.1s ease,
+	color .5s ease, border-color 0.1s ease;
+}
+
+.button_1:active {
+  background-color: #45a29e;
+  padding: 4px 8px;
+  margin-bottom: 28px;
+  transition: padding 0.1s ease, margin-bottom 0.1s ease;
+}
+
+.button_2 {
+	background-color: #c5c6c7;
+	border-style: solid;
+	border-color: #c5c6c7;
+	border-radius: 5px;
+	color: black;
+	padding: 8px 16px;
+	text-align: center;
+	text-decoration: none;
+	display: inline-block;
+	font-size: 16px;
+	cursor: pointer;
+	margin-bottom: 20px;
+}
+
+.button_2:hover {
+	border-color: #45a29e;
+	background-color: #45a29e;
+	color: white;
+	transition: background-color 0.1s ease,
+	color .5s ease, border-color 0.1s ease;
+}
+
+.button_2:active {
+  background-color: #45a29e;
+  padding: 4px 8px;
+  margin-bottom: 28px;
+  transition: padding 0.1s ease, margin-bottom 0.1s ease;
 }
 
 /* Main.php */
 
-	#tot_disp {
-		width: 100%;
-		text-align: center;
-		margin-bottom: 10px;
-	}
-	
-	#svg_container {
-		display: block;
-	    margin-left: auto;
-	    margin-right: auto;
-	}
-	
-	#map {
-		fill: blue;
-		fill-opacity: 0.1;
-		stroke-opacity: 0.9;
-	}
-	
-	circle {
-		fill: white;
-		cursor: pointer;
-	}
-	
-	circle.green {
-		fill: green;
-	}
-	
-	circle.yellow {
-		fill: yellow;
-	}
-	
-	circle.red {
-		fill: red;
-	}
-	
-	circle.selected {
-		stroke: black;
-		stroke-width: 1;
-	}
-	
-	#total_disp {
-		display: none;
-	}
-	
-	#point_infos {
-		margin-top: 30px;
-		margin-right: 30px;
-		text-align: center;
-		display: none;
-	}
+#tot_disp {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+#svg_container {
+	display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#map {
+	fill: blue;
+	fill-opacity: 0.1;
+	stroke-opacity: 0.9;
+}
+
+circle {
+	fill: white;
+	cursor: pointer;
+}
+
+circle.green {
+	fill: green;
+}
+
+circle.yellow {
+	fill: yellow;
+}
+
+circle.red {
+	fill: red;
+}
+
+circle.selected {
+	stroke: black;
+	stroke-width: 1;
+}
+
+#total_disp {
+	display: none;
+}
+
+#disp_posto {
+	margin: 20px;
+}
+
+#point_infos {
+	margin-top: 30px;
+	margin-right: 30px;
+	text-align: center;
+	display: none;
+	background-color: #1f2833;
+	color: white;
+}
 
 /* Login.php */
 

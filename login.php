@@ -1,11 +1,8 @@
 <?php 
-session_start();
-include 'utils.php';
-
-if(isset($_SESSION["email"])){
-    myRedirect("main.php");
-}
-
+    session_start();
+    include 'utils.php';
+    checkHTTPS();
+    checkLogged();
 ?>
 
 <!DOCTYPE HTML>
@@ -15,14 +12,14 @@ if(isset($_SESSION["email"])){
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Noleggio mezzi</title>
     <script charset="utf-8" src="js/jquery-3.4.1.min.js"></script>
+    <script charset="utf-8" src="js/app.js"></script>
     <link rel="stylesheet" href="css/app.css" /> 
 </head>
 <body>
     <header>
-        <h1 id="title">Noleggio mezzi di trasporto</h1>
-        <h3 id="subtitle">Login</h3>
+        <h1>Boom Bici!</h1>
     </header>
-    
+   
     <div id="left_block" class="js_view">
         <nav class="js_view">
         	<a href="main.php">Prenotazioni<br></a>
@@ -30,28 +27,30 @@ if(isset($_SESSION["email"])){
         	<a id="menu_login" href="login.php">Login<br></a>
         	<a id="menu_registration" href="registration.php">Registrazione<br></a>
         	<?php } else { ?>
-        	<a id="menu_logout" href="main.php" onclick="logout()">Logout</a>
+        	<a id="menu_logout" onclick="logout()">Logout</a>
         	<?php } ?>
    		</nav>
     </div>
     
     <div id="center_block" class="js_view">
     	
-    	<div class="error_message" id="error_message">
-    		<p class="p_inline"></p>
-    		<span class="closebtn" onclick="$(this).parent().hide(200)">&times;</span>
+        <div id="info_message">
+            <p class="p_inline"></p>
+            <span class="closebtn" onclick="hideMsg()">&times;</span>
     	</div>
+    	
+    	<h3 id="subtitle">Login</h3>
       
-        <div class="form">
+        <form>
             <fieldset>
                 <legend>Inserisci le tue credenziali</legend><br>
                 Email:<br>
                 <input type="email" name="email" id="email" placeholder="bob@gmail.com"><br>
                 Password:<br>
                 <input type="password" name="password" id="psw"><br>
-                <input type="submit" value="Entra" onclick="login()">
+                <input class="button_1" type="submit" value="Entra" onclick="login(event)">
             </fieldset>
-        </div>
+        </form>
         
     </div>
     
@@ -61,7 +60,13 @@ if(isset($_SESSION["email"])){
             .js_view {display:none;}
         </style>
     </noscript>
-    
-    <script charset="utf-8" src="js/app.js"></script>
+        
+    <?php 
+        if(isset($_REQUEST["type_msg"]) && isset($_REQUEST["message"])) {
+            $type = $_REQUEST['type_msg'];
+            $msg = $_REQUEST['message'];
+            echo "<script>showMsg('$type', '$msg') </script>";
+         } 
+     ?>
 </body>
 </html>
