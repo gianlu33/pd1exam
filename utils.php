@@ -11,12 +11,12 @@ function fillMap(){
     $height = 400;
     
     echo "<svg class='js_view' width='$width' height='$height' id='svg_container'>\n";
-    echo "<rect width='600' height='400' id='map' />\n";
+    echo "<rect id='map_background' width='$width' height='$height' />";
     
     getAvailability($height);
     
     echo "Sorry, your browser does not support inline SVG.\n";
-    echo "</svg>\n";
+    echo "</svg>\n</div>\n";
 }
 
 function getAvailability($height){

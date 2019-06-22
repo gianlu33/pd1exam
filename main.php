@@ -17,10 +17,11 @@
 </head>
 <body>
     <header>
-        <h1>Boom Bici!</h1>
+    	<h1 id="title">Prenotazioni</h1>
+    	<a href="main.php"><img id="logo" src="./img/logo_dark.png"></a>
     </header>
     
-    <div id="img"></div>
+    <div id="background"></div>
     
     <div id="left_block" class="js_view">
         <nav class="js_view">
@@ -38,15 +39,13 @@
         <div id="info_message">
             <p class="p_inline"></p>
             <span class="closebtn" onclick="hideMsg()">&times;</span>
-    	</div>
-    	
-    	<h3 id="subtitle">Prenotazioni</h3>
-        
+    	</div>        
         <div id="tot_disp">
             Disponibilit&agrave totale:
             Motorini: <p class="p_inline" id="tot_moto"></p>
             Biciclette: <p class="p_inline" id="tot_bici"></p>
         </div>
+        
     	<?php fillMap(); ?>
     </div>
     

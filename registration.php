@@ -17,10 +17,11 @@
 </head>
 <body>
     <header>
-        <h1>Boom Bici!</h1>
+    	<h1 id="title">Registrazione</h1>
+    	<a href="main.php"><img id="logo" src="./img/logo_dark.png"></a>
     </header>
     
-    <div id="img"></div>
+    <div id="background"></div>
         
     <div id="left_block" class="js_view">
         <nav class="js_view">
@@ -40,9 +41,7 @@
             <p class="p_inline"></p>
             <span class="closebtn" onclick="hideMsg()">&times;</span>
     	</div>
-    	
-    	<h3 id="subtitle">Registrazione</h3>
-		
+    			
 		<form>
             <fieldset>
                 <legend>Inserisci i tuoi dati</legend><br>
