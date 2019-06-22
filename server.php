@@ -84,7 +84,7 @@ function manageLogin() {
                 
         authLogin($email, $psw);    
         $_SESSION["email"] = $email;
-        $_SESSION['time']=time();
+        $_SESSION['time']= time();
     }
     catch(Exception $e) {
         http_response_code(400);

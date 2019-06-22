@@ -46,15 +46,16 @@ function displayInfoPoint(x, y) {
 }
 
 function getInfoPoint(x, y) {
-	$("#js_popup").remove();
+	//TODO ma devo fare una richiesta per ogni click del punto o altro..?
+	removePopup();
 
 	if(isNaN(x) || isNaN(y) || x < 0 || y < 0) {
-		showPopup("#right_block", "Punto non valido.", true);
+		showMsg("error_message", "Punto non valido.");
 		return;
 	}
 	
 	if(!pointSelected.set || x !== pointSelected.x || y !== pointSelected.y) {
-		showPopup("#right_block", "Il punto non è quello selezionato.", true);
+		showMsg("error_message", "Il punto non è quello selezionato.");
 		return;
 	}
 	
@@ -93,11 +94,12 @@ function login(e){
 	}
 	
 	if(!checkPsw(psw)) {
-		showPopup("#psw", "La password deve contenere due caratteri speciali.");
+		removePopup();
+		showPopup("#psw", "La password non contiene almeno due caratteri speciali.");
 		return;
 	}
 	
-	$("#js_popup").remove();
+	removePopup();
 	
 	$.ajax({
 		  url: 'server.php',
@@ -140,7 +142,7 @@ function registration(e) {
 		return;
 	}
 	
-	$("#js_popup").remove();
+	removePopup();
 	
 	$.ajax({
 		  url: 'server.php',
@@ -158,7 +160,7 @@ function reserve(e) {
 	var bici = $("#prenota_bici").val();
 	
 	if(!pointSelected.set) {
-		showPopup("#right_block", "Non hai selezionato nessun punto.", true);
+		showMsg("warning_message", "Non hai selezionato nessun punto.");
 		return;
 	}
 	
@@ -166,7 +168,7 @@ function reserve(e) {
 	var y = pointSelected.y;
 	
 	if(!pointSelected.setTot) {
-		showPopup("#right_block", "Fatal error: non so quanti posti ci sono qui.", true);
+		showMsg("warning_message", "Fatal error: non so quanti posti ci sono qui.");
 		return;
 	}
 	
@@ -175,22 +177,22 @@ function reserve(e) {
 	var totbici = pointSelected.bici;
 	
 	if(totmoto == 0 && totbici == 0) {
-		showPopup("#right_block", "Nessun mezzo disponibile qui.", true);
+		showMsg("warning_message", "Nessun mezzo disponibile qui.");
 		return;
 	}
 	
 	if(isNaN(moto) || isNaN(bici) || moto < 0 || bici < 0) {
-		showPopup("#right_block", "Inserisci numeri validi.", true);
+		showMsg("warning_message", "Inserisci numeri validi.");
 		return;
 	}
 	
 	if(moto == 0 && bici == 0) {
-		showPopup("#right_block", "Devi prenotare almeno un mezzo.", true);
+		showMsg("warning_message", "Devi prenotare almeno un mezzo.");
 		return;
 	}
 		
     if(totbici < parseInt(bici) + ((moto > totmoto) ? moto-totmoto : 0)) {
-		showPopup("#right_block", "Mezzi non sufficienti.", true);
+    	showMsg("warning_message", "Mezzi non sufficienti.");
 		return;
     }
 	
@@ -206,11 +208,13 @@ function reserve(e) {
 function showMsg(type, msg){
 	$("#info_message").addClass(type);
 	$("#info_message > p").text(msg);
-	$("#info_message").show(200);
+	//$("#info_message").show(200);
+	$("#info_message").css({visibility: "visible"});
 }
 
 function hideMsg(){
-	$("#info_message").hide(200);
+	//$("#info_message").hide(200);
+	$("#info_message").css({visibility: "hidden"});
 	$("#info_message").removeClass();
 }
 
@@ -226,6 +230,7 @@ function reloadWithMessage(url, type, message) {
 
 function checkEmail(email) {
 	//very simple checker (server side is much stronger)
+	//TODO migliora regex
 	var re = /\S+@\S+\.\S+/;
     return re.test(email);
 }
@@ -235,24 +240,21 @@ function checkPsw(psw) {
     return re.test(psw);
 }
 
-function showPopup(id, msg, append) {
-	console.log(append);
-	
-	$("#js_popup").remove();
+function showPopup(id, msg) {
+	removePopup();
 	
 	div = "<div id='js_popup'>" + 
 			"<span class='closebtn' onclick='$(this).parent().hide(200)'>&times;</span>" +
 			msg + "</div>";
 	
-	if(append) {
-		$(id).append(div);
-	}
-	else {
-		$(id).after(div);
-	}
+	$(id).after(div);
 	
 	$("#js_popup").hide();
 	$("#js_popup").show(200);
+}
+
+function removePopup(){
+	$("#js_popup").remove();
 }
 
 function checkCookies() {

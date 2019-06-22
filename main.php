@@ -2,7 +2,10 @@
     session_start();
     include 'utils.php';
     checkHTTPS();
-    verifyInactivity();
+    if(isset($_SESSION["email"]) && verifyInactivity()) {
+        $_REQUEST['type_msg'] = "warning_message";
+        $_REQUEST['message'] = "Sessione scaduta.";
+    }
 ?>
 
 <!DOCTYPE HTML>
@@ -10,7 +13,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Noleggio mezzi</title>
+    <title>Boom Bici</title>
     <script charset="utf-8" src="js/jquery-3.4.1.min.js"></script>
     <script charset="utf-8" src="js/app.js"></script>
     <link rel="stylesheet" href="css/app.css" /> 
@@ -36,10 +39,12 @@
     </div>
     
     <div id="center_block" class="js_view"> 
+    
         <div id="info_message">
             <p class="p_inline"></p>
             <span class="closebtn" onclick="hideMsg()">&times;</span>
-    	</div>        
+    	</div>       
+    	 
         <div id="tot_disp">
             Disponibilit&agrave totale:
             Motorini: <p class="p_inline" id="tot_moto"></p>
@@ -59,6 +64,7 @@
                 <fieldset>
                     <legend>Prenota</legend><br>
                     Numero motorini:<br>
+                    <!-- TODO vedi se mettere tendina -->
                     <input id="prenota_moto" type="number" name="moto" min="0"><br>
                     Numero biciclette:<br>
                     <input id="prenota_bici" type="number" name="bici" min="0"><br>
