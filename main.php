@@ -64,7 +64,6 @@
                 <fieldset>
                     <legend>Prenota</legend><br>
                     Numero motorini:<br>
-                    <!-- TODO vedi se mettere tendina -->
                     <input id="prenota_moto" type="number" name="moto" min="0"><br>
                     Numero biciclette:<br>
                     <input id="prenota_bici" type="number" name="bici" min="0"><br>

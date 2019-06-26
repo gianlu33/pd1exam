@@ -229,9 +229,7 @@ function reloadWithMessage(url, type, message) {
 }
 
 function checkEmail(email) {
-	//very simple checker (server side is much stronger)
-	//TODO migliora regex
-	var re = /\S+@\S+\.\S+/;
+	var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
     return re.test(email);
 }
 
