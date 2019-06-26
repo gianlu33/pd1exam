@@ -46,7 +46,6 @@ function displayInfoPoint(x, y) {
 }
 
 function getInfoPoint(x, y) {
-	//TODO ma devo fare una richiesta per ogni click del punto o altro..?
 	removePopup();
 
 	if(isNaN(x) || isNaN(y) || x < 0 || y < 0) {
@@ -77,9 +76,18 @@ function getInfoPoint(x, y) {
 				$("#prenota_bici").attr("max", bici);
 				
 				pointSelected.setPosti(moto, bici);
+				
+				$("#circle_"+ x + "_" + y).removeClass();
+				$("#circle_"+ x + "_" + y).addClass(getClass(parseInt(moto) + parseInt(bici)));
 			},
 		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
+}
+
+function getClass(num){
+	if(num >= 4) return "green";
+	if(num > 0) return "yellow";
+	return "red";
 }
 
 function login(e){	
