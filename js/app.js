@@ -280,5 +280,7 @@ $(document).ready(function() {
 	if(checkCookies()) return; //tutto ok
 	
 	$(".js_view").hide();
-	$("body").append("<h2>Cookies disabilitati</h2>");	
+
+	$("#ck_js_disabled > p").text("Cookie disabilitati.");
+	$("#ck_js_disabled").show();
 });

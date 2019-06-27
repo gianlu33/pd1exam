@@ -20,13 +20,22 @@
 </head>
 <body>
     <header>
+    
+    	<?php 
+        	if(isset($_SESSION["email"])) {
+        	   echo "<h3 id='hello'>" . $_SESSION['email'] . "</h3>";
+        	}
+    	?>
+    	
     	<h1 id="title">Prenotazioni</h1>
     	<a href="main.php"><img id="logo" src="./img/logo_dark.png"></a>
+    	
     </header>
     
     <div id="background"></div>
     
     <div id="left_block" class="js_view">
+    	
         <nav class="js_view">
         	<a href="main.php">Prenotazioni<br></a>
         	<?php if(!isset($_SESSION["email"])) { ?>
@@ -75,10 +84,14 @@
     	</div>
     </div>
     	     
+    <div id="ck_js_disabled" class="error_message">
+        <p class="p_inline">Javascript disabilitato.</p>
+	</div>   
+    	
     <noscript>
-    	<h2>Javascript disabilitato.</h2>
     	<style>
             .js_view {display:none;}
+            #ck_js_disabled {display: block;}
         </style>
     </noscript>
     

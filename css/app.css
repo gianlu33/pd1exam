@@ -136,6 +136,17 @@ form input {
 	margin-left: auto;
 }
 
+#ck_js_disabled {
+	width: 90%;
+	padding: 10px;
+	text-align: center;
+	color: white;
+	margin-bottom: 20px;
+	display: none;
+	margin-right: auto;
+	margin-left: auto;
+}
+
 #js_popup {
 	position: absolute;
 	padding: 10px;
@@ -264,6 +275,12 @@ form input {
 	fill-opacity: 0.2;
 	stroke-opacity: 0.9;
 	z-index: -1;
+}
+
+#hello {
+	position: absolute;
+	top: 20px;
+	right: 100px;
 }
 
 circle {

@@ -55,10 +55,14 @@
         
     </div>
     
+    <div id="ck_js_disabled" class="error_message">
+        <p class="p_inline">Javascript disabilitato.</p>
+	</div>   
+    	
     <noscript>
-    	<h2>Javascript disabilitato.</h2>
     	<style>
             .js_view {display:none;}
+            #ck_js_disabled {display: block;}
         </style>
     </noscript>
         
