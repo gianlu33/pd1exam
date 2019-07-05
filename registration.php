@@ -18,14 +18,14 @@
 <body>
     <header>
     	<h1 id="title">Registrazione</h1>
-    	<a href="main.php"><img id="logo" src="./img/logo_dark.png"></a>
+    	<a href="index.php"><img id="logo" src="./img/logo_dark.png"></a>
     </header>
     
     <div id="background"></div>
         
     <div id="left_block" class="js_view">
         <nav class="js_view">
-        	<a href="main.php">Prenotazioni<br></a>
+        	<a href="index.php">Prenotazioni<br></a>
         	<?php if(!isset($_SESSION["email"])) { ?>
         	<a id="menu_login" href="login.php">Login<br></a>
         	<a id="menu_registration" href="registration.php">Registrazione<br></a>

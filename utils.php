@@ -32,11 +32,11 @@ function getAvailability($height){
     
     $conn = dbConnect();
     
-    $sql = "SELECT * FROM AVAILABILITY";
+    $sql = "SELECT * FROM availability";
     
     if(! $risposta = mysqli_query($conn,$sql)) { 
         mysqli_close($conn);
-        throw new Exception("Errore di collegamento al DB."); 
+        throw new Exception("Errore durante la richiesta dei posti di noleggio."); 
     }
     
     while($row = mysqli_fetch_array($risposta, MYSQLI_ASSOC)) {
@@ -57,9 +57,9 @@ function getAvailability($height){
 }
 
 function dbConnect() {
-    $user = "root";
-    $pwd = "";
-    $db = "exam";
+    $user = "s256647";
+    $pwd = "ringberf";
+    $db = "s256647";
     
     $conn = mysqli_connect("localhost", $user, $pwd, $db);
     if(mysqli_connect_error()) { 
@@ -95,7 +95,7 @@ function getInfoPoint($x, $y){
     $x = mysqli_real_escape_string($conn, $x);
     $y = mysqli_real_escape_string($conn, $y);
     
-    $sql = "SELECT NumMoto, NumBici FROM AVAILABILITY WHERE X = $x AND Y = $y";
+    $sql = "SELECT NumMoto, NumBici FROM availability WHERE X = $x AND Y = $y";
     
     if(! $risposta = mysqli_query($conn,$sql)) {
         throw new Exception("Errore durante la query al DB.");
@@ -119,7 +119,7 @@ function authLogin($username, $password) {
         
     $username = mysqli_real_escape_string($conn, $username);
 
-    $sql = "SELECT Password FROM USERS WHERE Username = '$username'";
+    $sql = "SELECT Password FROM users WHERE Username = '$username'";
     
     if(!$risposta = mysqli_query($conn,$sql)) {
         throw new Exception("Errore durante la query al DB.");
@@ -145,7 +145,7 @@ function authRegistration($username, $password) {
     $username = mysqli_real_escape_string($conn, $username);
     $psw_hashed = password_hash($password, PASSWORD_DEFAULT);
     
-    $sql = "INSERT INTO USERS(Username, Password) VALUES ('$username', '$psw_hashed')";
+    $sql = "INSERT INTO users(Username, Password) VALUES ('$username', '$psw_hashed')";
     
     if(!mysqli_query($conn,$sql)) {
         mysqli_close($conn);
@@ -168,7 +168,7 @@ function authReservation($x, $y, $moto, $bici) {
     try {
         mysqli_autocommit($conn,false);
         
-        $sql_check = "SELECT NumMoto, NumBici FROM AVAILABILITY WHERE X = '$x' AND Y = '$y' FOR UPDATE";
+        $sql_check = "SELECT NumMoto, NumBici FROM availability WHERE X = '$x' AND Y = '$y' FOR UPDATE";
         
         if(! $risposta = mysqli_query($conn,$sql_check)) {
             throw new Exception("Errore verifica disponibilit" . utf8_encode("à") . " posti.");
@@ -198,14 +198,14 @@ function authReservation($x, $y, $moto, $bici) {
         
         $sold = "Assegnati: $moto_sold motorini, $bici_sold biciclette.";
         
-        $sql_reserve = "UPDATE AVAILABILITY SET NumMoto = NumMoto - '$moto_sold', 
+        $sql_reserve = "UPDATE availability SET NumMoto = NumMoto - '$moto_sold', 
                         NumBici = NumBici - '$bici_sold' WHERE X = '$x' AND Y = '$y'";
         
         if(!mysqli_query($conn,$sql_reserve)) {
             throw new Exception("Errore aggiornamento posti in AVAILABILITY.");
         }
         
-        $sql_insert = "INSERT INTO RESERVATIONS (Username, X, Y, NumBici, NumMoto)
+        $sql_insert = "INSERT INTO reservations (Username, X, Y, NumBici, NumMoto)
                         VALUES ('$user', '$x', '$y', '$bici_sold', '$moto_sold')";
         
         if(!mysqli_query($conn,$sql_insert)) {
@@ -269,7 +269,7 @@ function destroySession() {
     session_destroy(); // destroy session
 }
 
-function myRedirect($url="main.php") {
+function myRedirect($url="index.php") {
     header('HTTP/1.1 307 temporary redirect');
     // L’URL relativo è accettato solo da HTTP/1.1
     header("Location: $url");

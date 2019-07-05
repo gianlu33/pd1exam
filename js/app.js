@@ -78,6 +78,7 @@ function getInfoPoint(x, y) {
 				pointSelected.setPosti(moto, bici);
 				
 				$("#circle_"+ x + "_" + y).removeClass();
+				$("#circle_"+ x + "_" + y).addClass("selected");
 				$("#circle_"+ x + "_" + y).addClass(getClass(parseInt(moto) + parseInt(bici)));
 			},
 		  error: function(data) { showMsg("error_message", data.responseText) }
@@ -113,7 +114,7 @@ function login(e){
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "login", email: email, psw: psw },
-		  success: function(data) { reloadWithMessage("main.php", "success_message", "Login eseguito.") },
+		  success: function(data) { reloadWithMessage("index.php", "success_message", "Login eseguito.") },
 		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
 }
@@ -123,7 +124,7 @@ function logout() {
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "logout"},
-		  success: function(data) { reloadWithMessage("main.php", "success_message", "Logout eseguito.") },
+		  success: function(data) { reloadWithMessage("index.php", "success_message", "Logout eseguito.") },
 		  error: function(data) { showMsg("error_message", "Non sei loggato.") }
 		});
 }
@@ -156,7 +157,7 @@ function registration(e) {
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "registration", email: email, psw: psw, psw_confirm: psw_confirm },
-		  success: function(data) { reloadWithMessage("main.php", "success_message", "Registrazione eseguita.") },
+		  success: function(data) { reloadWithMessage("index.php", "success_message", "Registrazione eseguita.") },
 		  error: function(data) { showMsg("error_message", data.responseText) }
 		});
 }
@@ -208,8 +209,8 @@ function reserve(e) {
 		  url: 'server.php',
 		  type: 'POST',
 		  data: { type: "reservation", x: x, y: y, moto: moto, bici: bici },
-		  success: function(data) { reloadWithMessage("main.php", "success_message", data) },
-		  error: function(data) { reloadWithMessage("main.php", "error_message", data.responseText) }
+		  success: function(data) { reloadWithMessage("index.php", "success_message", data) },
+		  error: function(data) { reloadWithMessage("index.php", "error_message", data.responseText) }
 		});
 }
 
